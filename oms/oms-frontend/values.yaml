@@ -1,0 +1,56 @@
+Labels:
+  app: oms-frontend
+
+deploymentSpec:
+  replicaCout: 1
+
+containerSpec:
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1000Mi
+    limits:
+      cpu: 1000m
+      memory: 1500Mi
+  image: "us-docker.pkg.dev/phrasal-planet-437502-r5/oms/oms-frontend"
+  tag:  "v1"
+
+serviceSpec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetport: 3000
+      protocol: TCP
+
+Ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: oms-prod
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/enable-opentelemetry: "true"
+    nginx.ingress.kubernetes.io/opentelemetry-trust-incoming-span: "true"
+  ingressClassName: "nginx"
+  rules:
+    - path: /
+      pathType: Prefix
+      backend:
+        service:
+          name: oms-frontend
+          port:
+            number: 3000
+    - path: /api
+      pathType: Prefix
+      backend:
+        service:
+          name: oms-backend
+          port:
+            number: 8000
+  host: "ui.weather-plant.com"
+  extraTls: 
+    - hosts:
+      - ui.weather-plant.com
+      secretName: oms-tls-frontebd
+serviceAccount:
+  create: false
+  name: ""
+  annotations: {}
+    # eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/team-a

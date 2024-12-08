@@ -1,0 +1,22 @@
+{{- if .Values.serviceMonitor.create }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: oms-backend-service-monitor
+  namespace: oms
+  labels:
+    release: prometheus
+spec:
+  endpoints:
+    - honorLabels: true
+      path: /api/prometheus/metrics
+      port: oms-backend
+      scheme: http
+      scrapeTimeout: 30s
+  jobLabel: prometheus-oms
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      app: oms-backend
+{{- end -}}

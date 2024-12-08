@@ -1,0 +1,110 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: gcp-eso
+  namespace: {{ .Release.Namespace }}
+spec:
+  refreshInterval: 10s       
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: secret-gcp           
+  target:
+    name: oms-backend-env
+    creationPolicy: Owner
+  data:
+  - secretKey: ALLOWED_HOSTS
+    remoteRef:
+      key: ALLOWED_HOSTS
+  - secretKey: DEBUG
+    remoteRef:
+      key: DEBUG
+  - secretKey: SECRET_KEY
+    remoteRef:
+      key: SECRET_KEY
+  - secretKey: IS_DJ_ADMIN_ENABLED
+    remoteRef:
+      key: IS_DJ_ADMIN_ENABLED
+  - secretKey: IS_API_DOC_ENABLED
+    remoteRef:
+      key: IS_API_DOC_ENABLED
+  - secretKey: IS_SWAGGER_ENABLED
+    remoteRef:
+      key: IS_SWAGGER_ENABLED
+  - secretKey: IS_REDOC_ENABLED
+    remoteRef:
+      key: IS_REDOC_ENABLED
+  - secretKey: DATABASE_ENGINE
+    remoteRef:
+      key: DATABASE_ENGINE
+  - secretKey: DATABASE_NAME
+    remoteRef:
+      key: DATABASE_NAME
+  - secretKey: DATABASE_USER
+    remoteRef:
+      key: DATABASE_USER
+  - secretKey: DATABASE_PASSWORD
+    remoteRef:
+      key: DATABASE_PASSWORD
+  - secretKey: DATABASE_HOST
+    remoteRef:
+      key: DATABASE_HOST
+  - secretKey: DATABASE_PORT
+    remoteRef:
+      key: DATABASE_PORT
+  - secretKey: CORS_ALLOWED_ORIGINS
+    remoteRef:
+      key: CORS_ALLOWED_ORIGINS
+  - secretKey: ACCESS_TOKEN_LIFETIME
+    remoteRef:
+      key: ACCESS_TOKEN_LIFETIME
+  - secretKey: REFRESH_TOKEN_LIFETIME
+    remoteRef:
+      key: REFRESH_TOKEN_LIFETIME
+  - secretKey: PAGE_SIZE
+    remoteRef:
+      key: PAGE_SIZE
+  - secretKey: LOG_LEVEL
+    remoteRef:
+      key: LOG_LEVEL
+  - secretKey: PRIVATE_KEY_FILE_PATH
+    remoteRef:
+      key: PRIVATE_KEY_FILE_PATH
+  - secretKey: PUBLIC_KEY_FILE_PATH
+    remoteRef:
+      key: PUBLIC_KEY_FILE_PATH
+  - secretKey: ALLOWED_CIDR_NETS
+    remoteRef:
+      key: ALLOWED_CIDR_NETS
+  - secretKey: CSRF_COOKIE_SECURE
+    remoteRef:
+      key: CSRF_COOKIE_SECURE
+  - secretKey: SESSION_COOKIE_SECURE
+    remoteRef:
+      key: SESSION_COOKIE_SECURE
+  - secretKey: SECURE_SSL_REDIRECT
+    remoteRef:
+      key: SECURE_SSL_REDIRECT  
+  - secretKey: SECURE_HSTS_SECONDS
+    remoteRef:
+      key: SECURE_HSTS_SECONDS
+  - secretKey: OTEL_EXPORTER_INSECURE
+    remoteRef:
+      key: OTEL_EXPORTER_INSECURE
+  - secretKey: OTEL_EXPORTER_URL
+    remoteRef:
+      key: OTEL_EXPORTER_URL
+  - secretKey: OTEL_IS_CONSOLE_METRIC_EXPORTER_ENABLED
+    remoteRef:
+      key: OTEL_IS_CONSOLE_METRIC_EXPORTER_ENABLED
+  - secretKey: OTEL_PYTHON_LOG_CORRELATION  
+    remoteRef:
+      key: OTEL_PYTHON_LOG_CORRELATION
+  - secretKey: CSRF_TRUSTED_ORIGINS
+    remoteRef:
+      key: CSRF_TRUSTED_ORIGINS
+  - secretKey: IS_OTEL_CONSOLE_METRIC_EXPORTER_ENABLED
+    remoteRef:
+      key: IS_OTEL_CONSOLE_METRIC_EXPORTER_ENABLED
+  - secretKey: IS_OTEL_EXPORTER_ENABLED
+    remoteRef:
+      key: IS_OTEL_EXPORTER_ENABLED

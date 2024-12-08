@@ -1,0 +1,25 @@
+config:
+  argocd:
+    grpcWeb: true
+    serverAddress: "https://argo-argocd-server:80"
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcmdvY2QiLCJzdWIiOiJhZG1pbjphcGlLZXkiLCJuYmYiOjE3Mjg3MTczNjMsImlhdCI6MTcyODcxNzM2MywianRpIjoiODM0NGVjM2ItOTE5NC00ZmVkLWJkMDUtM2IxYjQwYzFkYmEyIn0.1KQLDxwkC-r7UkQGimeBwz7YEEGKsp4QItPg_aB4500"
+  gitCommitUser: "argo-cd-image-updater"
+  gitCommitMail: "argo.cd@humancloud.co.in"
+  registries:
+    - name: Google Artifacts Registry - us
+      api_url: https://us-docker.pkg.dev
+      prefix: us-docker.pkg.dev
+      credentials: ext:/scripts/gke-workload-identity-auth.sh
+      credsexpire: 5m
+authScripts:
+  enabled: true
+  scripts:
+    gke-workload-identity-auth.sh: |
+      #!/bin/sh
+      ACCESS_TOKEN=$(wget --header 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token -q -O - | grep -Eo '"access_token":.*?[^\\]",' | cut -d '"' -f 4)
+      echo "oauth2accesstoken:$ACCESS_TOKEN"
+serviceAccount:
+  create: true
+  name: "argocd-image-updater"
+  annotations: 
+    iam.gke.io/gcp-service-account: argocd-image-updater@phrasal-planet-437502-r5.iam.gserviceaccount.com

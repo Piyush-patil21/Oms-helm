@@ -1,0 +1,46 @@
+grafana:
+  enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations: 
+      cert-manager.io/cluster-issuer: oms-prod
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    hosts: 
+      - grafana.weather-plant.com
+    path: /
+    tls: 
+    - secretName: grafana-tls
+      hosts:
+        - grafana.weather-plant.com
+  additionalDataSources: 
+  - name: loki
+    access: proxy
+    basicAuth: false
+    editable: false
+    jsonData:
+        tlsSkipVerify: true
+    type: loki
+    url: http://loki-gateway.monitoring
+    isDefault: false
+
+alertmanager:
+  enabled: false
+
+prometheusOperator:
+  enabled: true
+prometheus:
+  enabled: true
+  agentMode: false
+  serviceAccount:
+    create: true
+    name: "prometheus-bucket-store"
+    annotations: 
+      iam.gke.io/gcp-service-account: prometheus-bucket-store@phrasal-planet-437502-r5.iam.gserviceaccount.com
+  service:
+    type: ClusterIP
+  prometheusSpec:
+    ruleSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    scrapeConfigSelectorNilUsesHelmValues: false
